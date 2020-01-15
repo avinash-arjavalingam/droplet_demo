@@ -1,6 +1,7 @@
 from PIL import Image
+from droplet.client.client import DropletConnection
 
-def ResNet50(inp):
+def ResNet50(_, inp):
 	import numpy as np
 	# from PIL import Image
 	import requests
@@ -42,5 +43,7 @@ def ResNet50(inp):
 	)
 	return df
 
-img = Image.open("dog_test.jpg")
-print(ResNet50(img))
+local_cloud = DropletConnection('127.0.0.1', '127.0.0.1', local=True)
+cloud_resnet50 = local_cloud.register(ResNet50, 'ResNet50')
+img = Image.open("../dog_test.jpg")
+print(cloud_resnet50(img).get())
